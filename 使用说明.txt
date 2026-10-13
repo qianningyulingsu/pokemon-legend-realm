@@ -110,9 +110,10 @@
   ▸ 步骤三：本地检查
       双击网站文件夹里的 index.html 看看效果。
 
-  ▸ 步骤四（已上传到网上的话）：重新发布
-      把 **_deploy 文件夹里的内容**再拖一次到托管平台上覆盖。
-      网址不变，玩家刷新就是新内容。
+  ▸ 步骤四：发布到网上
+      双击「发布到网上.bat」，约 10 秒推送到 GitHub Pages。
+      等 1 分钟让 GitHub 重建，刷新网页即可。
+      ★ 网址不变，不用重新发给别人。
 
   ── 想手动跑也行，命令在这 ──
      D:\python\python.exe "...\_build\prepare.py"
@@ -120,52 +121,39 @@
      D:\python\python.exe "...\_build\build.py"
      D:\python\python.exe "...\_build\build_qa.py"
      D:\python\python.exe "...\_build\pack.py"
+     D:\python\python.exe "...\_build\deploy_github.py"
 
   注意：convert.ps1 会跳过已经转过的文件；想强制重转，
   先把 _build\raw\*.htm 删掉。
 
 
 ══════════════════════════════════════════════════════════
-  五、发布到网上（让别人用手机打开）
+  五、官方网址（已经建好了，永久有效）
 
-  本地文件没有网址，手机要打开必须先放到网上。
+  ★  https://qianningyulingsu.github.io/pokemon-legend-realm/
 
-  ▸ 上传用哪个文件夹
-      「_deploy」  ← 就是它，里面已经放好了全部必需文件
-      （约 7.9 MB / 30 个文件）
+  手机、平板、电脑都能打开，用流量也行，不用装任何 App。
+  发给别人，对方点一下就能看。
 
-  ▸ 免费托管平台（都不用备案）
-      · EdgeOne Pages   https://pages.edgeone.ai/zh/drop   （腾讯，国内访问快）
-      · Netlify         https://app.netlify.com/drop
-      · Cloudflare      https://dash.cloudflare.com  → Workers & Pages
-      · GitHub Pages    需要会用 git
+  这个网址挂在 GitHub Pages 上，跟你的电脑完全无关：
+  电脑关机、断网、出门在外，照样能打开。
 
-  ▸ 上传步骤（以 EdgeOne / Netlify 为例，约 2 分钟）
-      1. 打开上面的网址，注册一个免费账号（邮箱即可）
-      2. 选择「上传 / 拖拽部署」
-      3. 把 **_deploy 文件夹里的内容**拖进去
-         ★ 注意：拖里面的文件，不是拖 _deploy 这个文件夹本身
-      4. 点部署，完成后会给你一个网址，例如 xxx.edgeone.app
+  ▸ 管理后台
+      代码仓库：https://github.com/qianningyulingsu/pokemon-legend-realm
+      部署记录：https://github.com/qianningyulingsu/pokemon-legend-realm/deployments
 
-  ▸ 上传之后
-      · 这个网址跟你电脑无关了，关机也能用
-      · 玩家用手机浏览器直接打开即可，不用装任何 App
-      · 发微信群、QQ 群、朋友圈，点一下就能看
-      · 以后改了内容，把 _deploy 再拖一次覆盖，网址不变
+  ⚠ 注意：这个仓库是公开的，任何人都能看到全部内容。
+     介意的话告诉我，可以换方案。
 
-  ▸ 临时方案：不想上传，用自己电脑当服务器
-      同一 WiFi：  在 _deploy 目录执行
-                   D:\python\python.exe -m http.server 8000
-                   手机浏览器打开  http://你电脑的IP:8000
-      公网访问：   再用 cloudflared 开隧道（_build\cloudflared.exe），
-                   会得到一个 https://xxx.trycloudflare.com 地址。
-                   ★ 这个地址靠你电脑中转，电脑关机/休眠就失效。
+  ▸ 想换成别的托管平台也行
+      上传用「_deploy」文件夹里的内容（约 7.9 MB）。
+      备选：EdgeOne Pages（腾讯，国内可能更快）
+            https://pages.edgeone.ai/zh/drop
+            Netlify  https://app.netlify.com/drop
+      步骤：注册免费账号 → 选「拖拽部署」→
+            把 _deploy 里的文件拖进去（不是拖 _deploy 文件夹本身）
 
-  ⚠ 提醒：一旦放到公网，任何拿到网址的人都能看到全部内容。
-     介意的话就别公开，只发 zip 给特定的人。
-
-
-══════════════════════════════════════════════════════════
+═
   六、内容分布
 ══════════════════════════════════════════════════════════
 
