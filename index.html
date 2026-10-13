@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>宝可梦~传说界域 · 规则查询站</title>
+<meta name="description" content="宝可梦~传说界域 卡牌游戏规则、技能卡、精灵阶级、模式玩法查询与智能问答">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#/">
+      <span class="brand-mark">◈</span>
+      <span class="brand-txt">宝可梦<em>~</em>传说界域</span>
+    </a>
+    <nav class="topnav">
+      <a href="#/" id="navHome">首页</a>
+      <a href="#/ask" id="navAsk">智能问答</a>
+    </nav>
+    <div class="topsearch">
+      <input id="q" type="search" placeholder="搜索技能、机制、模式、精灵…  按 / 聚焦" autocomplete="off" spellcheck="false">
+      <button id="qclear" class="qclear" title="清空" hidden>×</button>
+    </div>
+    <button id="theme" class="iconbtn" title="切换明暗主题">◐</button>
+  </div>
+</header>
+
+<main id="view" class="wrap"></main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span id="footstat"></span>
+    <span class="dot">·</span>
+    <span>本地离线站点，双击 index.html 即可打开</span>
+  </div>
+</footer>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="data/content.js"></script>
+<script src="data/qa.js"></script>
+<script src="data/quiz.js"></script>
+<script src="assets/qa.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
