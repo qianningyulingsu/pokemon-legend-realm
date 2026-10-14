@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "用 Chrome 打开网站（本地文件）",
+      "type": "chrome",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "用 Chrome 打开网站（本地服务器）",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8000/index.html",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "用 Edge 打开网站",
+      "type": "msedge",
+      "request": "launch",
+      "file": "${workspaceFolder}/index.html",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

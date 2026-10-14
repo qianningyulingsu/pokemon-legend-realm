@@ -1,0 +1,88 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "① 一键重建网站（改完文档后跑）",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", "${workspaceFolder}/_build/rebuild_all.ps1"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "② 发布到网上（更新官网）",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["${workspaceFolder}/_build/deploy_github.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "③ 本地预览（启动本地服务器）",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["-m", "http.server", "8000", "--directory", "${workspaceFolder}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "只重新打包上传包（不重建内容）",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["${workspaceFolder}/_build/pack.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "只重建问答知识库 + 题库",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["${workspaceFolder}/_build/build_qa.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "重新扫描文档文件夹（生成任务清单）",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["${workspaceFolder}/_build/prepare.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "用 Word 转换 rtf/docx → HTML",
+      "type": "shell",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File", "${workspaceFolder}/_build/convert.ps1"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "启动大模型代理（可选）",
+      "type": "shell",
+      "command": "D:\\python\\python.exe",
+      "args": ["${workspaceFolder}/_build/ai_proxy.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    }
+  ]
+}

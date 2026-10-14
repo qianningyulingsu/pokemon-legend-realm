@@ -567,3 +567,404 @@ mark.q{background:var(--gold);color:#14181f;border-radius:3px;padding:0 2px;font
   .qa-card{padding:16px 15px}
   .qa-card .ans-body{font-size:15.5px}
 }
+
+/* ==========================================================================
+   ★ 高级排版系统 v2 —— 字体体系 · 装饰 · 动效
+   —— 分区：
+        1. 排版变量（字体梯度）
+        2. 文档标题 / 各级标题（多样化装饰）
+        3. 条目卡片（编号徽章 + 悬停）
+        4. 特殊文本块（序言诗词 / 机制条 / 高亮 / 引用）
+        5. 滚动动效
+        6. 阅读进度条 / 回到顶部
+        7. 页面过渡
+   ========================================================================== */
+
+/* ---------------- 1. 排版变量 ---------------- */
+:root{
+  --t-doc:     clamp(26px, 3.6vw, 40px);   /* 文档标题 */
+  --t-h1:      clamp(20px, 2.2vw, 24px);   /* 一级小标题 */
+  --t-h2:      17.5px;
+  --t-h3:      15.5px;
+  --t-entry:   16.5px;                     /* 条目卡片标题 */
+  --t-body:    17px;
+  --t-quote:   19px;                       /* 诗词/序言 */
+  --t-meta:    12.5px;
+
+  --track-tight: -.01em;
+  --track-normal: .02em;
+  --track-wide:  .08em;
+  --track-poem:  .14em;
+
+  --serif2:"Source Han Serif SC","Noto Serif SC","Songti SC","SimSun","宋体",serif;
+  --kai:"Kaiti SC","STKaiti","KaiTi","楷体",serif;
+}
+
+/* ---------------- 2. 文档标题 & 各级标题 ---------------- */
+
+/* 文档主标题：金色渐变 + 光晕 + 装饰线 */
+.doc-head{position:relative;padding-bottom:22px;margin-bottom:10px;border-bottom:none}
+.doc-head::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,var(--bc),transparent 72%);
+  opacity:.65;
+}
+.doc-head h1{
+  font-family:var(--serif);font-weight:800;
+  font-size:var(--t-doc);line-height:1.32;letter-spacing:var(--track-normal);
+  margin:0 0 14px;
+  background:linear-gradient(168deg,#fffdf6 2%,var(--gold) 52%,var(--gold2) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 22px color-mix(in srgb,var(--gold) 26%,transparent));
+  position:relative;
+}
+.doc-head h1::after{                     /* 扫光 */
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:sweep 6.5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sweep{0%,72%{transform:translateX(-115%)}88%,100%{transform:translateX(115%)}}
+
+/* 一级小标题（.sec 由 Word 标题样式转来）：左侧发光竖条 + 底部渐隐线 */
+.doc-body h2.sec{
+  position:relative;
+  font-family:var(--sans);font-weight:800;
+  font-size:var(--t-h1);letter-spacing:var(--track-normal);
+  margin:38px 0 16px;padding:2px 0 2px 18px;
+  line-height:1.5;color:var(--text);
+  border-left:none;
+}
+.doc-body h2.sec::before{
+  content:"";position:absolute;left:0;top:.18em;bottom:.18em;width:4px;border-radius:4px;
+  background:linear-gradient(180deg,var(--bc),color-mix(in srgb,var(--bc) 30%,transparent));
+  box-shadow:0 0 14px color-mix(in srgb,var(--bc) 60%,transparent);
+}
+.doc-body h2.sec::after{
+  content:"";position:absolute;left:18px;right:0;bottom:-7px;height:1px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--bc) 55%,transparent),transparent 78%);
+}
+.doc-body h3.sec{
+  position:relative;font-family:var(--sans);font-weight:700;
+  font-size:var(--t-h2);letter-spacing:var(--track-normal);
+  margin:26px 0 11px;padding-left:15px;line-height:1.55;color:var(--text);
+  border-left:none;
+}
+.doc-body h3.sec::before{
+  content:"";position:absolute;left:0;top:.42em;width:7px;height:7px;border-radius:2px;
+  background:var(--bc);transform:rotate(45deg);
+  box-shadow:0 0 10px color-mix(in srgb,var(--bc) 70%,transparent);
+}
+.doc-body h3.sec.solo{margin-bottom:12px;color:color-mix(in srgb,var(--text) 88%,var(--bc))}
+
+/* ---------------- 3. 正文 ---------------- */
+.doc-body p.para{
+  font-family:var(--serif2);
+  font-size:var(--t-body);line-height:2.06;letter-spacing:.014em;
+  margin:0 0 10px;color:color-mix(in srgb,var(--text) 94%,transparent);
+}
+.doc-body p.para.ti{text-indent:2em}
+.doc-body p.para.ind1{margin-left:2em}
+.doc-body p.para.ind2{margin-left:4em}
+.doc-body p.para.ind3{margin-left:6em}
+
+/* ---------------- 4. 条目卡片（编号徽章 + 悬停高光） ---------------- */
+.entry{
+  position:relative;margin:16px 0;padding:16px 20px 10px 22px;
+  border-radius:0 14px 14px 0;
+  border-left:3px solid color-mix(in srgb,var(--bc) 68%,transparent);
+  background:linear-gradient(100deg,color-mix(in srgb,var(--bc) 7%,transparent),transparent 46%),var(--panel);
+  transition:border-color .22s,background .22s,transform .22s,box-shadow .22s;
+}
+.entry::after{                            /* 鼠标跟随高光 */
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),
+             color-mix(in srgb,var(--bc) 12%,transparent),transparent 62%);
+  opacity:0;transition:opacity .28s;
+}
+.entry:hover::after{opacity:1}
+.entry:hover{
+  border-left-color:var(--bc);
+  transform:translateX(3px);
+  box-shadow:-4px 0 26px -12px color-mix(in srgb,var(--bc) 85%,transparent);
+}
+.entry-h{
+  font-family:var(--sans);font-weight:700;
+  font-size:var(--t-entry);letter-spacing:var(--track-normal);
+  color:var(--text);margin-bottom:10px;line-height:1.7;
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
+}
+/* 编号徽章：由 JS 把「1.」「一、」等包成 .e-no */
+.entry-h .e-no{
+  flex:0 0 auto;min-width:26px;height:24px;padding:0 7px;border-radius:8px;
+  display:inline-grid;place-items:center;
+  background:color-mix(in srgb,var(--bc) 20%,transparent);
+  border:1px solid color-mix(in srgb,var(--bc) 40%,transparent);
+  color:var(--bc);font-size:12.5px;font-weight:800;letter-spacing:0;
+  font-family:var(--sans);
+}
+.entry-b>p:last-child{margin-bottom:6px}
+
+/* ---------------- 5. 特殊文本块 ---------------- */
+
+/* 序言 / 诗词：居中、宽松字距、上下装饰 */
+.poem{
+  margin:22px auto;padding:20px 24px;max-width:640px;text-align:center;
+  font-family:var(--kai);font-size:var(--t-quote);line-height:2.3;
+  letter-spacing:var(--track-poem);color:color-mix(in srgb,var(--gold) 88%,#fff);
+  border-top:1px solid color-mix(in srgb,var(--gold) 26%,transparent);
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 26%,transparent);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 5%,transparent),transparent);
+  text-indent:0;
+}
+/* 机制条：识别「机制N：」并加徽章感 */
+.doc-body p.para.mch{
+  position:relative;padding-left:14px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--bc) 9%,transparent),transparent 60%);
+  border-radius:0 8px 8px 0;
+}
+/* 数值/要点行（以 ①②③ 或 · 开头） */
+.doc-body p.para.pt{
+  padding-left:1.4em;text-indent:-1.4em;
+}
+/* 高亮底色（作者手标） */
+.hl{
+  color:#14181f;padding:.08em .34em;border-radius:5px;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  font-weight:600;
+  box-shadow:0 0 0 1px rgba(0,0,0,.06) inset;
+}
+/* 字体差异 */
+.ff-hei{font-family:"Source Han Sans SC","SimHei","黑体",var(--sans);font-weight:600}
+.ff-yahei{font-family:"Microsoft YaHei","微软雅黑",var(--sans)}
+.ff-math{font-family:var(--mono)}
+.fs-14{font-size:1.10em}
+.fs-16{font-size:1.26em}
+.para b,.entry-h b{color:var(--gold);font-weight:800}
+
+/* ---------------- 6. 滚动动效 ---------------- */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.05s}
+.rv.d2{transition-delay:.1s}
+
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  .doc-head h1::after{animation:none}
+  .entry{transition:none}
+}
+
+/* ---------------- 7. 阅读进度条 / 回到顶部 ---------------- */
+.rpbar{
+  position:fixed;left:0;top:0;height:3px;z-index:200;width:0;
+  background:linear-gradient(90deg,var(--bc),var(--gold));
+  box-shadow:0 0 12px color-mix(in srgb,var(--gold) 70%,transparent);
+  transition:width .12s linear;
+}
+.totop{
+  position:fixed;right:22px;bottom:96px;z-index:120;
+  width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--line2);background:color-mix(in srgb,var(--bg2) 88%,transparent);
+  backdrop-filter:blur(12px);color:var(--text);font-size:16px;
+  opacity:0;transform:translateY(12px);pointer-events:none;
+  transition:.28s;
+}
+.totop.on{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+
+/* ---------------- 8. 页面过渡 ---------------- */
+#view{animation:viewIn .3s ease}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 首页卡片：光泽跟随 */
+.board-card{position:relative;overflow:hidden}
+.board-card .sheen{
+  position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),
+             color-mix(in srgb,var(--bc) 22%,transparent),transparent 60%);
+}
+.board-card:hover .sheen{opacity:1}
+
+/* 数字滚动 */
+.stat-num{font-variant-numeric:tabular-nums}
+
+/* 搜索命中：脉冲 */
+@keyframes flash{0%,100%{background:transparent}22%{background:color-mix(in srgb,var(--gold) 26%,transparent)}}
+.flash{animation:flash 1.5s ease;border-radius:8px}
+
+/* ---------------- 手机适配补充 ---------------- */
+@media (max-width:640px){
+  .doc-body p.para{font-size:16.4px}
+  .doc-head h1{font-size:clamp(23px,6vw,30px)}
+  .doc-body h2.sec{font-size:19px;margin-top:30px}
+  .doc-body h3.sec{font-size:16.5px}
+  .poem{font-size:17px;padding:16px 14px;letter-spacing:.1em}
+  .totop{right:14px;bottom:84px;width:38px;height:38px}
+}
+
+/* ==========================================================================
+   ★ 语义分层样式 —— 让「技能卡名」「技能描述」「机制」「字段」各具其形
+   ========================================================================== */
+
+/* ---------------- 1. 技能卡：整张卡放大 + 阶级徽章 ---------------- */
+.entry[data-kind="card"]{
+  margin:22px 0;padding:20px 24px 14px 24px;
+  border-radius:14px;
+  border-left:none;
+  border:1px solid color-mix(in srgb,var(--bc) 34%,var(--line));
+  background:
+    radial-gradient(120% 120% at 0% 0%,color-mix(in srgb,var(--bc) 13%,transparent),transparent 58%),
+    var(--panel);
+  box-shadow:0 10px 30px -22px color-mix(in srgb,var(--bc) 90%,transparent);
+}
+.entry[data-kind="card"]::before{
+  content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--bc),color-mix(in srgb,var(--bc) 18%,transparent));
+  box-shadow:0 0 16px color-mix(in srgb,var(--bc) 70%,transparent);
+}
+.entry[data-kind="card"] .entry-h{
+  font-size:19px;margin-bottom:12px;padding-bottom:10px;
+  border-bottom:1px dashed color-mix(in srgb,var(--bc) 26%,transparent);
+  align-items:center;
+}
+.entry[data-kind="card"] .card-name{
+  font-family:var(--serif);font-weight:800;font-size:19.5px;letter-spacing:.02em;
+  background:linear-gradient(96deg,#fffdf5,color-mix(in srgb,var(--bc) 92%,#fff) 88%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+/* 阶级徽章 */
+.tier-badge{
+  flex:0 0 auto;margin-left:auto;padding:3px 11px;border-radius:999px;
+  font-family:var(--sans);font-size:11.5px;font-weight:800;letter-spacing:.06em;
+  border:1px solid currentColor;
+}
+.tier-badge[data-t="妖神级"]{color:#ffd166;background:color-mix(in srgb,#ffd166 15%,transparent)}
+.tier-badge[data-t="妖王级"]{color:#ff8fa3;background:color-mix(in srgb,#ff8fa3 15%,transparent)}
+.tier-badge[data-t="特权级"]{color:#a78bfa;background:color-mix(in srgb,#a78bfa 15%,transparent)}
+.tier-badge[data-t="活动级"]{color:#4dd0e1;background:color-mix(in srgb,#4dd0e1 15%,transparent)}
+.tier-badge[data-t="常规级"]{color:#9aa3b8;background:color-mix(in srgb,#9aa3b8 14%,transparent)}
+.tier-badge[data-t="专属限定"]{color:#e9c46a;background:color-mix(in srgb,#e9c46a 16%,transparent)}
+.tier-badge[data-t="神兽竞技"]{color:#7ee787;background:color-mix(in srgb,#7ee787 15%,transparent)}
+
+/* ---------------- 2. 子技能：缩进 + 圆点 + 小号粗体 ---------------- */
+.entry[data-kind="skill"]{
+  margin:9px 0 9px 14px;padding:10px 16px 6px 18px;
+  border-radius:0 10px 10px 0;
+  border-left:2px solid color-mix(in srgb,var(--bc) 42%,transparent);
+  background:color-mix(in srgb,var(--bc) 4%,transparent);
+}
+.entry[data-kind="skill"]::before{
+  content:"";position:absolute;left:-6px;top:17px;width:7px;height:7px;border-radius:50%;
+  background:var(--bc);box-shadow:0 0 9px color-mix(in srgb,var(--bc) 80%,transparent);
+}
+.entry[data-kind="skill"] .entry-h{
+  font-size:14.5px;color:color-mix(in srgb,var(--bc) 88%,#fff);
+  margin-bottom:5px;letter-spacing:.04em;
+}
+.entry[data-kind="skill"] .e-no{
+  background:transparent;border:none;color:color-mix(in srgb,var(--bc) 92%,#fff);
+  font-size:13px;min-width:auto;padding:0 4px 0 0;height:auto;
+}
+.entry[data-kind="skill"] .entry-b p.para{font-size:16.2px;margin-bottom:5px}
+
+/* ---------------- 3. 机制条 ---------------- */
+.entry[data-kind="mech"]{
+  margin:20px 0;padding:16px 20px 10px 20px;
+  border-radius:12px;border-left:none;
+  border:1px solid color-mix(in srgb,var(--gold) 24%,var(--line));
+  background:
+    radial-gradient(110% 110% at 100% 0%,color-mix(in srgb,var(--gold) 10%,transparent),transparent 60%),
+    var(--panel);
+}
+.entry[data-kind="mech"] .entry-h{
+  font-size:17px;color:var(--gold);letter-spacing:.03em;
+  padding-bottom:9px;margin-bottom:10px;
+  border-bottom:1px solid color-mix(in srgb,var(--gold) 20%,transparent);
+}
+.entry[data-kind="mech"] .e-no{
+  background:color-mix(in srgb,var(--gold) 18%,transparent);
+  border-color:color-mix(in srgb,var(--gold) 42%,transparent);
+  color:var(--gold);font-size:11px;
+}
+
+/* ---------------- 4. 模式 / 期数 / 阶级 ---------------- */
+.entry[data-kind="mode"],.entry[data-kind="period"],.entry[data-kind="tier"]{
+  margin:18px 0;padding:14px 18px 8px 18px;border-radius:12px;border-left:none;
+  border:1px solid color-mix(in srgb,var(--accent) 26%,var(--line));
+  background:
+    linear-gradient(135deg,color-mix(in srgb,var(--accent) 8%,transparent),transparent 62%),
+    var(--panel);
+}
+.entry[data-kind="mode"] .entry-h,
+.entry[data-kind="period"] .entry-h,
+.entry[data-kind="tier"] .entry-h{
+  font-size:17.5px;color:var(--accent);letter-spacing:.03em;margin-bottom:9px;
+}
+.entry[data-kind="tier"] .entry-h{color:var(--gold)}
+
+/* ---------------- 5. 字段行：标签胶囊 + 内容 ---------------- */
+p.field-line{
+  display:flex;gap:10px;align-items:baseline;
+  text-indent:0 !important;margin:7px 0 9px !important;
+  padding-left:0;
+}
+p.field-line .f-label{
+  flex:0 0 auto;min-width:3.2em;padding:2px 9px;border-radius:7px;
+  font-family:var(--sans);font-size:12.5px;font-weight:700;letter-spacing:.06em;
+  background:var(--panel2);border:1px solid var(--line);
+  color:var(--dim);
+}
+p.field-line .f-body{
+  flex:1 1 auto;font-family:var(--serif2);font-size:16.6px;line-height:2;color:var(--text);
+}
+p.field-line.key .f-label{
+  background:color-mix(in srgb,var(--bc) 16%,transparent);
+  border-color:color-mix(in srgb,var(--bc) 38%,transparent);
+  color:color-mix(in srgb,var(--bc) 92%,#fff);
+}
+p.field-line.warn .f-label{
+  background:color-mix(in srgb,#f0b429 16%,transparent);
+  border-color:color-mix(in srgb,#f0b429 40%,transparent);color:#f0b429;
+}
+
+/* ---------------- 6. 重要内容突出 ---------------- */
+.doc-body p.para.imp{
+  position:relative;padding-left:14px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 7%,transparent),transparent 62%);
+  border-radius:0 8px 8px 0;
+}
+.doc-body p.para.imp::before{
+  content:"";position:absolute;left:0;top:.5em;bottom:.5em;width:2px;border-radius:2px;
+  background:color-mix(in srgb,var(--gold) 62%,transparent);
+}
+.doc-body p.para.hl-line{
+  padding:9px 14px;border-radius:10px;
+  border:1px solid color-mix(in srgb,var(--gold) 32%,transparent);
+  background:color-mix(in srgb,var(--gold) 8%,transparent);
+  font-weight:600;
+  box-shadow:0 0 22px -12px color-mix(in srgb,var(--gold) 90%,transparent);
+}
+
+/* ---------------- 7. 手机适配 ---------------- */
+@media (max-width:640px){
+  .entry[data-kind="card"]{padding:16px 16px 10px}
+  .entry[data-kind="card"] .card-name{font-size:17px}
+  .entry[data-kind="card"] .entry-h{font-size:17px}
+  .entry[data-kind="skill"]{margin-left:6px;padding:9px 12px 5px 14px}
+  .tier-badge{font-size:10.5px;padding:2px 8px}
+  p.field-line{flex-direction:column;gap:4px}
+  p.field-line .f-label{min-width:auto;align-self:flex-start}
+}
+
+/* ---------------- 技能行（普：/天：/怒：）---------------- */
+p.skill-line{display:flex;gap:9px;align-items:baseline;text-indent:0!important;margin:6px 0 7px!important}
+p.skill-line .sk-label{
+  flex:0 0 auto;min-width:2.2em;text-align:center;padding:2px 8px;border-radius:7px;
+  font-family:var(--sans);font-size:12.5px;font-weight:800;letter-spacing:.04em;
+  background:color-mix(in srgb,var(--bc) 18%,transparent);
+  border:1px solid color-mix(in srgb,var(--bc) 40%,transparent);
+  color:color-mix(in srgb,var(--bc) 96%,#fff);
+}
+p.skill-line .sk-body{flex:1 1 auto;font-family:var(--serif2);font-size:16.4px;line-height:2}

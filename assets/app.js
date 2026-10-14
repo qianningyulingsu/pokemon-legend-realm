@@ -147,11 +147,13 @@
     var r = parseHash();
     window.scrollTo({ top: 0, behavior: 'auto' });
     markNav(r.name === 'ask' ? 'ask' : (r.name === 'home' ? 'home' : ''));
-    if (r.name === 'board') return renderBoard(r.key);
-    if (r.name === 'doc') return renderDoc(r.id, r.anchor);
-    if (r.name === 'ask') return renderAsk();
-    if (r.name === 'search') { qEl.value = r.q; return renderSearch(r.q); }
-    return renderHome();
+    if (r.name === 'board') renderBoard(r.key);
+    else if (r.name === 'doc') renderDoc(r.id, r.anchor);
+    else if (r.name === 'ask') renderAsk();
+    else if (r.name === 'search') { qEl.value = r.q; renderSearch(r.q); }
+    else renderHome();
+    // 视觉增强：编号徽章 / 诗词块 / 机制条 / 滚动显现 / 鼠标光泽
+    if (window.LJFX) { try { window.LJFX.apply(view); } catch (e) {} }
   }
 
   /* ---------------- 首页 ---------------- */
@@ -627,4 +629,7 @@
   })();
 
   route();
+
+  /* 启动视觉增强的全局部分 */
+  if (window.LJFX) { try { window.LJFX.boot(); } catch (e) {} }
 })();

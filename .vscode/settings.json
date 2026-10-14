@@ -1,0 +1,55 @@
+{
+  // ===== 编码：中文字体、UTF-8、换行符 =====
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  // ===== 编辑器 =====
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.rulers": [100],
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": false,
+  "editor.minimap.enabled": false,
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "[html]": {
+    "editor.tabSize": 2
+  },
+
+  // ===== 资源管理器：隐藏生成物，只显示源码 =====
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "_build/raw": true,
+    "_deploy": true,
+    "_build/*.json": false
+  },
+
+  // ===== 搜索：排除巨型生成文件和素材 =====
+  "search.exclude": {
+    "data/content.js": true,
+    "data/qa.js": true,
+    "data/quiz.js": true,
+    "_build/raw/**": true,
+    "_build/*.json": true,
+    "images/**": true,
+    "_deploy/**": true
+  },
+
+  // ===== 文件类型关联 =====
+  "files.associations": {
+    "*.code-workspace": "jsonc"
+  },
+
+  // ===== 本地预览：VS Code 自带 Live Server 扩展即可 =====
+  "liveServer.settings.root": "/",
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.donotShowInfoMsg": true
+}

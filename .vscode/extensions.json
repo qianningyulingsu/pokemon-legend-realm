@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ritwickdey.liveserver",
+    "ms-vscode.powershell",
+    "esbenp.prettier-vscode",
+    "formulahendry.code-runner"
+  ]
+}
